@@ -26,7 +26,6 @@
     brightnessctl # For Screen Brightness Control
     cliphist # Clipboard manager using rofi menu
     clamav # Antivirus
-    lutris
     clamtk # Antivirus Frontend
     cmatrix # Matrix Movie Effect In Terminal
     direnv #Direnv for presentation tool
@@ -34,7 +33,7 @@
     eza # Beautiful ls Replacement
     file-roller # Archive Manager
     firefox # Firefox
-    glxinfo #needed for inxi diag util
+    mesa-demos #glxinfo (renamed) needed for inxi diag util
     gemini-cli # Googles AI assistant
     tuigreet # The Login Manager (Sometimes Referred To As Display Manager)
     htop # Simple Terminal Based System Monitor
