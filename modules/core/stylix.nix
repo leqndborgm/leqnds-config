@@ -11,7 +11,7 @@ in {
     targets.plymouth.enable = true;
     image = stylixImage;
     polarity = "dark";
-    opacity.terminal = 1.0;
+    opacity.terminal = 0.6;
 
     base16Scheme = {
       base00 = "0a0a10";
