@@ -45,7 +45,7 @@
     libnotify # For Notifications
     lm_sensors # Used For Getting Hardware Temps
     lolcat # Add Colors To Your Terminal Command Output
-    lshw # Detailed Hardware Information
+    lshw # Detailed Hardware # CLI System Information Tool
     mpv # Incredible Video Player
     ncdu # Disk Usage Analyzer With Ncurses Interface
     nixfmt-rfc-style # Nix Formatter
