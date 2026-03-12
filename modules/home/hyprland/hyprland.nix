@@ -45,6 +45,7 @@ in {
       enable = true;
     };
     settings = {
+      "$modifier" = "SUPER";
       exec-once = [
         "wl-paste --type text --watch cliphist store # Stores only text data"
         "wl-paste --type image --watch cliphist store # Stores only image data"
@@ -80,7 +81,6 @@ in {
       };
 
       general = {
-        "$modifier" = "SUPER";
         layout = "dwindle";
         gaps_in = 6;
         gaps_out = 8;
@@ -116,7 +116,6 @@ in {
           size = 5;
           passes = 3;
           ignore_opacity = false;
-          new_optimizations = true;
         };
         shadow = {
           enabled = true;
@@ -125,11 +124,6 @@ in {
           color = "rgba(1a1a1aee)";
         };
       };
-
-      layerrule = [
-        "blur, waybar" # Blur hinter Waybar aktivieren
-        "ignorealpha 0.6, waybar" # sorgt dafür, dass Semi-Transparency korrekt wirkt
-      ];
 
       cursor = {
         sync_gsettings_theme = true;
@@ -153,7 +147,7 @@ in {
         "XDG_SESSION_DESKTOP, Hyprland"
         "GDK_BACKEND, wayland, x11"
         "CLUTTER_BACKEND, wayland"
-        "QT_QPA_PLATFORM=wayland;xcb"
+        "QT_QPA_PLATFORM,wayland;xcb"
         "QT_WAYLAND_DISABLE_WINDOWDECORATION, 1"
         "QT_AUTO_SCREEN_SCALE_FACTOR, 1"
         "SDL_VIDEODRIVER, x11"
