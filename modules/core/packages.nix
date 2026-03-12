@@ -20,10 +20,12 @@
 
   environment.systemPackages = with pkgs; [
     amfora # Fancy Terminal Browser For Gemini Protocol
+    antigravity # Google KI IDE
     appimage-run # Needed For AppImage Support
     blender # Animation software
     brave # Brave Browser
     brightnessctl # For Screen Brightness Control
+    cargo
     cliphist # Clipboard manager using rofi menu
     clamav # Antivirus
     clamtk # Antivirus Frontend
@@ -45,6 +47,7 @@
     lm_sensors # Used For Getting Hardware Temps
     lolcat # Add Colors To Your Terminal Command Output
     lshw # Detailed Hardware # CLI System Information Tool
+    nodejs
     mpv # Incredible Video Player
     ncdu # Disk Usage Analyzer With Ncurses Interface
     nixfmt-rfc-style # Nix Formatter
@@ -57,6 +60,7 @@
     pkg-config # Wrapper Script For Allowing Packages To Get Info On Others
     playerctl # Allows Changing Media Volume Through Scripts
     php #php language
+    python3
     ripgrep # Improved Grep
     socat # Needed For Screenshots
     unrar # Tool For Handling .rar Files

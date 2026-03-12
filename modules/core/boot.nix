@@ -4,10 +4,19 @@
   ...
 }: {
   boot = {
-    kernelPackages = pkgs.linuxPackages_zen;
-    kernelModules = ["v4l2loopback"];
-    extraModulePackages = [config.boot.kernelPackages.v4l2loopback];
+    kernelPackages = pkgs.linuxPackages;
+    # kernelModules = ["v4l2loopback"];
+    # extraModulePackages = [config.boot.kernelPackages.v4l2loopback];
     kernel.sysctl = {"vm.max_map_count" = 2147483642;};
+    kernelPatches = [
+      {
+        name = "enable-rust-fw-loader";
+        patch = null;
+        extraConfig = ''
+          RUST_FW_LOADER_ABSTRACTIONS y
+        '';
+      }
+    ];
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
     # Appimage Support
