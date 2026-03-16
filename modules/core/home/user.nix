@@ -7,7 +7,7 @@
   hostname,
   ...
 }: let
-  inherit (import ../../hosts/${host}/variables.nix) gitUsername;
+  inherit (import ../../../hosts/${host}/variables.nix) gitUsername;
 in {
   imports = [inputs.home-manager.nixosModules.home-manager];
   home-manager = {
@@ -16,7 +16,7 @@ in {
     backupFileExtension = "backup";
     extraSpecialArgs = {inherit inputs username host profile hostname;};
     users.${username} = {
-      imports = [./../home];
+      imports = [./../../user/home];
       home = {
         username = "${username}";
         homeDirectory = "/home/${username}";

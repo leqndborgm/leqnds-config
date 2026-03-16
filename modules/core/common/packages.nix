@@ -22,7 +22,6 @@
     amfora # Fancy Terminal Browser For Gemini Protocol
     antigravity # Google KI IDE
     appimage-run # Needed For AppImage Support
-    blender # Animation software
     brave # Brave Browser
     brightnessctl # For Screen Brightness Control
     cargo
@@ -68,12 +67,10 @@
     usbutils # Good Tools For USB Devices
     wget # Tool For Fetching Files With Links
     yazi #TUI File Manager
-    ytmdl # Tool For Downloading Audio From YouTube
     jetbrains-toolbox #For Jetbrains IDEs
     gcc
     cmake
     gdb
     clang
-    vesktop # Better Discord
   ];
 }
