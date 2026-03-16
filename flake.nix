@@ -13,60 +13,43 @@
 
   outputs = {nixpkgs, ...} @ inputs: let
     system = "x86_64-linux";
-    host = "home";
-    profile = "intel";
     username = "martinb";
+
+    mkSystem = {host, profile, modules}: nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = {
+        inherit inputs username host profile;
+      };
+      inherit modules;
+    };
   in {
     nixosConfigurations = {
-      amd = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          inherit username;
-          inherit host;
-          inherit profile;
-        };
+      # ── Home ──────────────────────────────────────────────
+      amd = mkSystem {
+        host = "home"; profile = "amd";
         modules = [./profiles/amd];
       };
-      nvidia = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          inherit username;
-          inherit host;
-          inherit profile;
-        };
+      nvidia = mkSystem {
+        host = "home"; profile = "nvidia";
         modules = [./profiles/nvidia];
       };
-      nvidia-laptop = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          inherit username;
-          inherit host;
-          inherit profile;
-        };
+      nvidia-laptop = mkSystem {
+        host = "home"; profile = "nvidia-laptop";
         modules = [./profiles/nvidia-laptop];
       };
-      intel = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          inherit username;
-          inherit host;
-          inherit profile;
-        };
+      intel = mkSystem {
+        host = "home"; profile = "intel";
         modules = [./profiles/intel];
       };
-      vm = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          inherit username;
-          inherit host;
-          inherit profile;
-        };
+      vm = mkSystem {
+        host = "home"; profile = "vm";
         modules = [./profiles/vm];
+      };
+
+      # ── Work ──────────────────────────────────────────────
+      work = mkSystem {
+        host = "work"; profile = "intel";
+        modules = [./profiles/work];
       };
     };
   };
