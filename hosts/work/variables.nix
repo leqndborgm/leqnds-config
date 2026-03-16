@@ -1,7 +1,7 @@
 {
   # Git Configuration
-  gitUsername = "leqndborgm";
-  gitEmail = "bothe.martin@gmx.de";
+  gitUsername = "Martin Bothe";
+  gitEmail = "martin.bothe@quasiris.de";
 
   # Hyprland Settings
   extraMonitorSettings = "";
@@ -13,8 +13,8 @@
   consoleKeyMap = "de";
 
   # For Nvidia Prime support
-  intelID = "PCI:0:0:0";
-  nvidiaID = "PCI:0:0:0";
+  intelID = "PCI:0:2:0";
+  nvidiaID = "PCI:1:0:0";
 
   # Enable NFS
   enableNFS = true;

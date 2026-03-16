@@ -15,10 +15,10 @@
     system = "x86_64-linux";
     username = "martinb";
 
-    mkSystem = {host, profile, modules}: nixpkgs.lib.nixosSystem {
+    mkSystem = {hostname, host, profile, modules}: nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = {
-        inherit inputs username host profile;
+        inherit inputs username host profile hostname;
       };
       inherit modules;
     };
@@ -26,29 +26,29 @@
     nixosConfigurations = {
       # ── Home ──────────────────────────────────────────────
       amd = mkSystem {
-        host = "home"; profile = "amd";
+        hostname = "amd"; host = "home"; profile = "amd";
         modules = [./profiles/amd];
       };
       nvidia = mkSystem {
-        host = "home"; profile = "nvidia";
+        hostname = "nvidia"; host = "home"; profile = "nvidia";
         modules = [./profiles/nvidia];
       };
       nvidia-laptop = mkSystem {
-        host = "home"; profile = "nvidia-laptop";
+        hostname = "nvidia-laptop"; host = "home"; profile = "nvidia-laptop";
         modules = [./profiles/nvidia-laptop];
       };
       intel = mkSystem {
-        host = "home"; profile = "intel";
+        hostname = "intel"; host = "home"; profile = "intel";
         modules = [./profiles/intel];
       };
       vm = mkSystem {
-        host = "home"; profile = "vm";
+        hostname = "vm"; host = "home"; profile = "vm";
         modules = [./profiles/vm];
       };
 
       # ── Work ──────────────────────────────────────────────
       work = mkSystem {
-        host = "work"; profile = "intel";
+        hostname = "work"; host = "work"; profile = "intel";
         modules = [./profiles/work];
       };
     };

@@ -4,6 +4,7 @@
   username,
   host,
   profile,
+  hostname,
   ...
 }: let
   inherit (import ../../hosts/${host}/variables.nix) gitUsername;
@@ -13,7 +14,7 @@ in {
     useUserPackages = true;
     useGlobalPkgs = false;
     backupFileExtension = "backup";
-    extraSpecialArgs = {inherit inputs username host profile;};
+    extraSpecialArgs = {inherit inputs username host profile hostname;};
     users.${username} = {
       imports = [./../home];
       home = {
