@@ -5,7 +5,7 @@
   ...
 }: let
   inherit
-    (import ../../../hosts/${host}/variables.nix)
+    (import ../../../../hosts/${host}/variables.nix)
     extraMonitorSettings
     keyboardLayout
     stylixImage
@@ -27,7 +27,7 @@ in {
   # Place Files Inside Home Directory
   home.file = {
     "Pictures/Wallpapers" = {
-      source = ../../../wallpapers;
+      source = ../../../../wallpapers;
       recursive = true;
     };
     ".face.icon".source = ./face.jpg;

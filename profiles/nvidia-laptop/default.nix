@@ -10,7 +10,7 @@ in {
   imports = [
     ../../hosts/${host}
     ../../modules/drivers
-    ../../modules/core
+    ../../modules/core/home
   ];
 
   # Enable GPU Drivers

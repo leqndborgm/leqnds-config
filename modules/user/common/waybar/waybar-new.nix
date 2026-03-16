@@ -5,7 +5,7 @@
   config,
   ...
 }: let
-  inherit (import ../../../hosts/${host}/variables.nix);
+  inherit (import ../../../../hosts/${host}/variables.nix);
 in
   with lib; {
     #Configure & Theme Waybar

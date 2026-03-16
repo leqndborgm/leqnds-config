@@ -26,10 +26,10 @@
   stylixImage = ../../wallpapers/holdingHands.jpg;
 
   # Set Waybar
-  waybarChoice = ../../modules/home/waybar/waybar-alt.nix;
+  waybarChoice = ../../modules/user/common/waybar/waybar-alt.nix;
 
   # Set Animation style
-  animChoice = ../../modules/home/hyprland/animations-dynamic.nix;
+  animChoice = ../../modules/user/common/hyprland/animations-dynamic.nix;
 
   # Enable Thunar GUI File Manager
   thunarEnable = false;

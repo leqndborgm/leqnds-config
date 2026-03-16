@@ -13,7 +13,7 @@
 
       background = [
         {
-          path = "${config.home.homeDirectory}/leqnds-config/modules/home/hyprland/lockscreen/lockscreen.jpg";
+          path = "${config.home.homeDirectory}/leqnds-config/modules/user/common/hyprland/lockscreen/lockscreen.jpg";
           blur_passes = 1;
           blur_size = 2;
         }

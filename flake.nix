@@ -29,10 +29,10 @@
         hostname = "amd"; host = "home"; profile = "amd";
         modules = [./profiles/amd];
       };
-      nvidia = mkSystem {
-        hostname = "nvidia"; host = "home"; profile = "nvidia";
-        modules = [./profiles/nvidia];
-      };
+      # nvidia = mkSystem {
+      #   hostname = "nvidia"; host = "home"; profile = "nvidia";
+      #   modules = [./profiles/nvidia];
+      # };
       nvidia-laptop = mkSystem {
         hostname = "nvidia-laptop"; host = "home"; profile = "nvidia-laptop";
         modules = [./profiles/nvidia-laptop];
@@ -41,10 +41,10 @@
         hostname = "intel"; host = "home"; profile = "intel";
         modules = [./profiles/intel];
       };
-      vm = mkSystem {
-        hostname = "vm"; host = "home"; profile = "vm";
-        modules = [./profiles/vm];
-      };
+      # vm = mkSystem {
+      #   hostname = "vm"; host = "home"; profile = "vm";
+      #   modules = [./profiles/vm];
+      # };
 
       # ── Work ──────────────────────────────────────────────
       work = mkSystem {

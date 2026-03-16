@@ -1,6 +1,6 @@
 {host, ...}: let
   inherit
-    (import ../../../hosts/${host}/variables.nix)
+    (import ../../../../hosts/${host}/variables.nix)
     ;
 in {
   wayland.windowManager.hyprland.settings = {
