@@ -19,6 +19,7 @@ in {
     ./rofi
     ./qt.nix
     ./scripts
+    ./ssh.nix
     ./starship.nix
     ./stylix.nix
     ./stylix-home.nix
