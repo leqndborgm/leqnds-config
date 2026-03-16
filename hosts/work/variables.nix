@@ -17,10 +17,10 @@
   nvidiaID = "PCI:0:0:0";
 
   # Enable NFS
-  enableNFS = false;
+  enableNFS = true;
 
   # Enable Printing Support
-  printEnable = false;
+  printEnable = true;
 
   # Set Stylix Image
   stylixImage = ../../wallpapers/holdingHands.jpg;

@@ -1,5 +1,5 @@
 {host, ...}: let
-  inherit (import ../../hosts/${host}/variables.nix) waybarChoice;
+  inherit (import ../../../hosts/${host}/variables.nix) waybarChoice;
 in {
   imports = [
     ../amfora.nix

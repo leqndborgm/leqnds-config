@@ -6,7 +6,7 @@
   profile,
   ...
 }: let
-  inherit (import ../../hosts/${host}/variables.nix) gitUsername;
+  inherit (import ../../../hosts/${host}/variables.nix) gitUsername;
 in {
   imports = [inputs.home-manager.nixosModules.home-manager];
   home-manager = {
