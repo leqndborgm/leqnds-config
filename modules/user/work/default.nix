@@ -29,5 +29,6 @@ in {
     ../common/yazi
     ../common/zoxide.nix
     ../common/zsh
+    ./binds.nix
   ];
 }

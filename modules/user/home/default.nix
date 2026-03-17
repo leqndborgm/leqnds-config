@@ -4,6 +4,7 @@ in {
   imports = [
     ./amfora.nix
     ./cava.nix
+    ./binds.nix
     ./emoji.nix
     ./scripts
     ../common/bash.nix
