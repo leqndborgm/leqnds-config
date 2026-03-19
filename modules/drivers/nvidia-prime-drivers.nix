@@ -4,11 +4,9 @@
   config,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.drivers.nvidia-prime;
-in
-{
+in {
   options.drivers.nvidia-prime = {
     enable = mkEnableOption "Enable Nvidia Prime Hybrid GPU Offload";
     intelBusID = mkOption {
@@ -24,10 +22,7 @@ in
   config = mkIf cfg.enable {
     hardware.nvidia = {
       prime = {
-        offload = {
-          enable = true;
-          enableOffloadCmd = true;
-        };
+        sync.enable = true;
         # Make sure to use the correct Bus ID values for your system!
         intelBusId = "${cfg.intelBusID}";
         nvidiaBusId = "${cfg.nvidiaBusID}";

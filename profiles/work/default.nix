@@ -1,7 +1,4 @@
-{
-  host,
-  ...
-}: let
+{host, ...}: let
   inherit (import ../../hosts/${host}/variables.nix) intelID nvidiaID;
 in {
   imports = [
@@ -16,6 +13,6 @@ in {
     intelBusID = "${intelID}";
     nvidiaBusID = "${nvidiaID}";
   };
-  drivers.intel.enable = false;
+  drivers.intel.enable = true;
   vm.guest-services.enable = false;
 }
