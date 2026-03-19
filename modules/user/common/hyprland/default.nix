@@ -3,7 +3,6 @@
 in {
   imports = [
     animChoice
-    ./binds.nix
     ./hypridle.nix
     ./hyprland.nix
     ./hyprlock.nix
