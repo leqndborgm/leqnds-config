@@ -12,7 +12,7 @@ in {
     ../common/htop.nix
     ../common/hyprland
     ../common/kitty.nix
-    ../common/nvf.nix
+    ../common/nixvim.nix
     ../common/rofi
     ../common/qt.nix
     ../common/scripts
