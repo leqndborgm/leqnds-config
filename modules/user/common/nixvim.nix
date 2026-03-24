@@ -1,5 +1,6 @@
 {
   inputs,
+  config,
   ...
 }: {
   imports = [
@@ -17,44 +18,69 @@
 
     # Basic Options
     opts = {
-      number = true;         # Show line numbers
-      relativenumber = false; # Disable relative line numbers
-      shiftwidth = 2;        # Tab width
-      tabstop = 2;           # Tab width
-      softtabstop = 2;       # Tab width
-      expandtab = true;      # Use spaces instead of tabs
-      smartindent = true;    # Auto indenting
-      wrap = false;          # Disable line wrapping
-      swapfile = false;      # Disable swap files
-      backup = false;        # Disable backup files
-      undofile = true;       # Enable persistent undo
-      hlsearch = true;       # Enable search highlighting
-      incsearch = true;      # Incremental search
-      termguicolors = true;  # Enable 24-bit RGB color
-      scrolloff = 8;         # Keep 8 lines above/below cursor
-      signcolumn = "yes";    # Always show sign column
-      updatetime = 50;       # Faster completion
-      cursorline = true;     # Highlight the current line
+      number = true;
+      relativenumber = false;
+      shiftwidth = 2;
+      tabstop = 2;
+      softtabstop = 2;
+      expandtab = true;
+      smartindent = true;
+      wrap = false;
+      swapfile = false;
+      backup = false;
+      undofile = true;
+      hlsearch = true;
+      incsearch = true;
+      termguicolors = true;
+      scrolloff = 8;
+      signcolumn = "yes";
+      updatetime = 50;
+      cursorline = true;
     };
 
-    # UI & Aesthetics
+    # UI & Aesthetics (VS Code Style)
     plugins.web-devicons.enable = true;
 
     plugins.lualine = {
       enable = true;
-      settings.options.theme = "auto"; # Matches your system theme
+      settings.options = {
+        theme = "auto";
+        section_separators = { left = ""; right = ""; }; # Flatter, modern look
+        component_separators = { left = "|"; right = "|"; };
+      };
     };
 
     plugins.bufferline = {
       enable = true;
-      settings.options.offsets = [
-        {
-          filetype = "neo-tree";
-          text = "File Explorer";
-          highlight = "Directory";
-          text_align = "left";
-        }
-      ];
+      settings.options = {
+        separator_style = "thin"; # Clean VS Code-like separators
+        offsets = [
+          {
+            filetype = "neo-tree";
+            text = "EXPLORER";
+            highlight = "Directory";
+            text_align = "left";
+          }
+        ];
+      };
+    };
+
+    # Breadcrumbs (Top bar)
+    plugins.barbecue.enable = true;
+
+    # Smooth Scrolling
+    plugins.neoscroll.enable = true;
+
+    # Color Previews (Hex codes)
+    plugins.nvim-colorizer.enable = true;
+
+    # Floating Terminal (VS Code style)
+    plugins.toggleterm = {
+      enable = true;
+      settings = {
+        direction = "float";
+        open_mapping = "[[<C-t>]]"; # Ctrl + t to toggle terminal
+      };
     };
 
     plugins.noice = {
@@ -80,8 +106,10 @@
     # Syntax & Code Structure
     plugins.treesitter = {
       enable = true;
-      settings.indent.enable = true;
-      settings.highlight.enable = true;
+      settings = {
+        indent.enable = true;
+        highlight.enable = true;
+      };
     };
 
     plugins.indent-blankline = {
@@ -89,10 +117,23 @@
       settings.scope.enabled = true;
     };
 
+    # Symbol Outline (Right side)
+    plugins.aerial = {
+      enable = true;
+      settings = {
+        on_attach = config.lib.nixvim.mkRaw ''
+          function(bufnr)
+            vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
+            vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
+          end
+        '';
+      };
+    };
+
     # Git Integration
     plugins.gitsigns = {
       enable = true;
-      settings.current_line_blame = true; # Shows who wrote the line
+      settings.current_line_blame = true;
     };
 
     # File Explorer
@@ -163,16 +204,16 @@
 
     plugins.luasnip.enable = true;
 
-    # Utility Plugins (QOL)
-    plugins.comment.enable = true; # "gcc" to comment line, "gc" in visual mode
+    # Utility Plugins
+    plugins.comment.enable = true;
     plugins.nvim-autopairs.enable = true;
-    plugins.surround.enable = true;
+    plugins.vim-surround.enable = true;
     plugins.which-key.enable = true;
 
-    # Highlight Overrides (for readability)
+    # Highlight Overrides
     highlight = {
       Comment = {
-        fg = "#94e2d5"; # Bright teal for readable comments
+        fg = "#94e2d5";
         italic = true;
       };
     };
@@ -186,6 +227,12 @@
         key = "<leader>e";
         action = "<cmd>Neotree toggle<CR>";
         options.desc = "Toggle File Explorer";
+      }
+      {
+        mode = "n";
+        key = "<leader>o";
+        action = "<cmd>AerialToggle!<CR>";
+        options.desc = "Toggle Outline";
       }
       {
         mode = "n";
