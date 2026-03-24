@@ -30,5 +30,6 @@ in {
     ../common/zoxide.nix
     ../common/zsh
     ./binds.nix
+    ./ssh.nix
   ];
 }

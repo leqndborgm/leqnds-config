@@ -4,7 +4,7 @@
   gitEmail = "martin.bothe@quasiris.de";
 
   # Hyprland Settings
-  extraMonitorSettings = "monitor=HDMI-A-1,preferred,auto,1";
+  extraMonitorSettings = "";
 
   # Program Options
   browser = "brave";
