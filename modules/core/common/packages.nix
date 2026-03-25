@@ -50,6 +50,8 @@
     mpv # Incredible Video Player
     ncdu # Disk Usage Analyzer With Ncurses Interface
     nixfmt-rfc-style # Nix Formatter
+    black # Python Formatter
+    prettierd # Prettier Formatter Daemon
     nwg-displays #configure monitor configs via GUI
     nemo # File Manager
     onefetch #provides zsaneyos build info on current system

@@ -3,6 +3,7 @@ result
 result-*
 .direnv/
 .envrc
+flake.lock
 
 # Editors
 *.swp

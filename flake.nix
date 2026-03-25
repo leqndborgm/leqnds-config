@@ -24,7 +24,9 @@
       specialArgs = {
         inherit inputs username host profile hostname;
       };
-      inherit modules;
+      modules = modules ++ [
+        { nixpkgs.config.allowUnfree = true; }
+      ];
     };
   in {
     nixosConfigurations = {

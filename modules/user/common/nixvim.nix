@@ -1,6 +1,8 @@
 {
   inputs,
   config,
+  pkgs,
+  host,
   ...
 }: {
   imports = [
@@ -19,7 +21,7 @@
     # Basic Options
     opts = {
       number = true;
-      relativenumber = false;
+      relativenumber = true; # Changed to true for easier jumping
       shiftwidth = 2;
       tabstop = 2;
       softtabstop = 2;
@@ -38,22 +40,22 @@
       cursorline = true;
     };
 
-    # UI & Aesthetics (VS Code Style)
+    # UI & Aesthetics
     plugins.web-devicons.enable = true;
 
     plugins.lualine = {
       enable = true;
       settings.options = {
         theme = "auto";
-        section_separators = { left = ""; right = ""; }; # Flatter, modern look
-        component_separators = { left = "|"; right = "|"; };
+        section_separators = { left = ""; right = ""; };
+        component_separators = { left = ""; right = ""; };
       };
     };
 
     plugins.bufferline = {
       enable = true;
       settings.options = {
-        separator_style = "thin"; # Clean VS Code-like separators
+        separator_style = "thin";
         offsets = [
           {
             filetype = "neo-tree";
@@ -74,12 +76,15 @@
     # Color Previews (Hex codes)
     plugins.nvim-colorizer.enable = true;
 
-    # Floating Terminal (VS Code style)
+    # Better UI for selects and inputs
+    plugins.dressing.enable = true;
+
+    # Floating Terminal
     plugins.toggleterm = {
       enable = true;
       settings = {
         direction = "float";
-        open_mapping = "[[<C-t>]]"; # Ctrl + t to toggle terminal
+        open_mapping = "[[<C-t>]]";
       };
     };
 
@@ -117,7 +122,25 @@
       settings.scope.enabled = true;
     };
 
-    # Symbol Outline (Right side)
+    # Navigation
+    plugins.flash = {
+      enable = true;
+      settings.labels = "asdfghjklqwertyuiopzxcvbnm";
+    };
+
+    plugins.oil = {
+      enable = true;
+      settings = {
+        default_file_explorer = true;
+        delete_to_trash = true;
+        skip_confirm_for_simple_edits = true;
+        view_options.show_hidden = true;
+      };
+    };
+
+    plugins.todo-comments.enable = true;
+
+    # Symbol Outline
     plugins.aerial = {
       enable = true;
       settings = {
@@ -134,6 +157,33 @@
     plugins.gitsigns = {
       enable = true;
       settings.current_line_blame = true;
+    };
+
+    plugins.diffview.enable = true;
+
+    # Diagnostics
+    plugins.trouble = {
+      enable = true;
+      settings.auto_close = true;
+    };
+
+    # Formatting
+    plugins.conform-nvim = {
+      enable = true;
+      settings = {
+        format_on_save = {
+          lsp_fallback = true;
+          timeout_ms = 500;
+        };
+        formatters_by_ft = {
+          nix = ["nixfmt"];
+          python = ["black"];
+          javascript = ["prettierd" "prettier"];
+          typescript = ["prettierd" "prettier"];
+          html = ["prettierd" "prettier"];
+          css = ["prettierd" "prettier"];
+        };
+      };
     };
 
     # File Explorer
@@ -153,10 +203,11 @@
         "<leader>ps" = "live_grep";
         "<leader>pb" = "buffers";
         "<leader>ph" = "help_tags";
+        "<leader>pt" = "todo-comments";
       };
     };
 
-    # LSP and Completion
+    # LSP
     plugins.lsp = {
       enable = true;
       servers = {
@@ -180,6 +231,42 @@
       };
     };
 
+    # Completion Menu with Icons
+    plugins.lspkind = {
+      enable = true;
+      cmp.menu = {
+        nvim_lsp = "[LSP]";
+        luasnip = "[Snip]";
+        buffer = "[Buf]";
+        path = "[Path]";
+      };
+    };
+
+    # AI (Ollama - Work only)
+    plugins.ollama = {
+      enable = host == "work";
+      model = "qwen2.5-coder:32b";
+      url = "http://127.0.0.1:11434";
+      prompts = {
+        Refactor = {
+          prompt = "Refactor the following code for better readability and performance. Maintain the same functionality:\n\n```$FT\n$TEXT\n```";
+          action = "replace";
+        };
+        Explain = {
+          prompt = "Explain how this code works in detail:\n\n```$FT\n$TEXT\n```";
+          action = "display";
+        };
+        UnitTests = {
+          prompt = "Generate comprehensive unit tests for this code using the standard testing framework for $FT:\n\n```$FT\n$TEXT\n```";
+          action = "display";
+        };
+        FixBugs = {
+          prompt = "Identify and fix any potential bugs or edge cases in this code:\n\n```$FT\n$TEXT\n```";
+          action = "replace";
+        };
+      };
+    };
+
     plugins.cmp = {
       enable = true;
       settings = {
@@ -190,6 +277,7 @@
           {name = "buffer";}
           {name = "luasnip";}
         ];
+        formatting.fields = ["kind" "abbr" "menu"];
         mapping = {
           "<C-Space>" = "cmp.mapping.complete()";
           "<C-d>" = "cmp.mapping.scroll_docs(-4)";
@@ -202,7 +290,15 @@
       };
     };
 
-    plugins.luasnip.enable = true;
+    plugins.luasnip = {
+      enable = true;
+      fromVscode = [
+        {
+          lazyLoad = true;
+          paths = "${pkgs.vimPlugins.friendly-snippets}";
+        }
+      ];
+    };
 
     # Utility Plugins
     plugins.comment.enable = true;
@@ -210,11 +306,31 @@
     plugins.vim-surround.enable = true;
     plugins.which-key.enable = true;
 
-    # Highlight Overrides
+    # Highlight Overrides (Super Readable Colors)
     highlight = {
       Comment = {
         fg = "#94e2d5";
         italic = true;
+      };
+      Function = {
+        fg = "#89b4fa";
+        bold = true;
+      };
+      Keyword = {
+        fg = "#cba6f7";
+        bold = true;
+      };
+      String = {
+        fg = "#a6e3a1";
+      };
+      Identifier = {
+        fg = "#f38ba8";
+      };
+      Type = {
+        fg = "#f9e2af";
+      };
+      Constant = {
+        fg = "#fab387";
       };
     };
 
@@ -230,9 +346,39 @@
       }
       {
         mode = "n";
+        key = "-";
+        action = "<cmd>Oil<CR>";
+        options.desc = "Open Oil File Explorer";
+      }
+      {
+        mode = "n";
         key = "<leader>o";
         action = "<cmd>AerialToggle!<CR>";
         options.desc = "Toggle Outline";
+      }
+      {
+        mode = "n";
+        key = "<leader>xx";
+        action = "<cmd>Trouble diagnostics toggle<CR>";
+        options.desc = "Toggle Trouble Diagnostics";
+      }
+      {
+        mode = "n";
+        key = "<leader>a";
+        action = "<cmd>Ollama<CR>";
+        options.desc = "Ollama AI Picker";
+      }
+      {
+        mode = "v";
+        key = "<leader>a";
+        action = ":<C-u>Ollama<CR>";
+        options.desc = "Ollama AI Picker (Visual)";
+      }
+      {
+        mode = "n";
+        key = "s";
+        action = config.lib.nixvim.mkRaw "function() require('flash').jump() end";
+        options.desc = "Flash Jump";
       }
       {
         mode = "n";
