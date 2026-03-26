@@ -231,21 +231,30 @@
       };
     };
 
-    # Completion Menu with Icons
-    plugins.lspkind = {
+    # Completion Engine (High Performance)
+    plugins.blink-cmp = {
       enable = true;
-      cmp.menu = {
-        nvim_lsp = "[LSP]";
-        luasnip = "[Snip]";
-        buffer = "[Buf]";
-        path = "[Path]";
+      settings = {
+        keymap.preset = "default";
+        appearance = {
+          use_nvim_cmp_as_default = true;
+          nerd_font_variant = "mono";
+        };
+        sources = {
+          default = ["lsp" "path" "snippets" "buffer" "minuet"];
+          providers.minuet = {
+            name = "minuet";
+            module = "minuet.blink";
+            score_offset = 100;
+          };
+        };
       };
     };
 
     # AI (Ollama - Work only)
     plugins.ollama = {
       enable = host == "work";
-      model = "qwen2.5-coder:32b";
+      model = "deepseek-r1:70b"; # Deep reasoning for architecture
       url = "http://127.0.0.1:11434";
       prompts = {
         Refactor = {
@@ -267,26 +276,52 @@
       };
     };
 
-    plugins.cmp = {
-      enable = true;
+    # Cursor-like Agent
+    plugins.avante = {
+      enable = host == "work";
       settings = {
-        autoEnableSources = true;
-        sources = [
-          {name = "nvim_lsp";}
-          {name = "path";}
-          {name = "buffer";}
-          {name = "luasnip";}
-        ];
-        formatting.fields = ["kind" "abbr" "menu"];
-        mapping = {
-          "<C-Space>" = "cmp.mapping.complete()";
-          "<C-d>" = "cmp.mapping.scroll_docs(-4)";
-          "<C-f>" = "cmp.mapping.scroll_docs(4)";
-          "<C-e>" = "cmp.mapping.close()";
-          "<CR>" = "cmp.mapping.confirm({ select = true })";
-          "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
-          "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
+        provider = "ollama";
+        vendors.ollama = {
+          __inherited_from = "openai";
+          api_key_name = "";
+          endpoint = "http://127.0.0.1:11434/v1";
+          model = "qwen2.5-coder:32b";
+          parse_curl_args = config.lib.nixvim.mkRaw ''
+            function(opts, code_opts)
+              return {
+                url = opts.endpoint .. "/chat/completions",
+                headers = {
+                  ["Accept"] = "application/json",
+                  ["Content-Type"] = "application/json",
+                },
+                body = {
+                  model = opts.model,
+                  messages = require("avante.providers").openai.parse_messages(code_opts),
+                  max_tokens = 2048,
+                  stream = true,
+                },
+              }
+            end
+          '';
+          parse_response_data = config.lib.nixvim.mkRaw ''
+            function(data_stream, event_state, opts)
+              require("avante.providers").openai.parse_response(data_stream, event_state, opts)
+            end
+          '';
         };
+      };
+    };
+
+    # Local Ghost-Text (Line Completion)
+    plugins.minuet = {
+      enable = host == "work";
+      settings = {
+        provider = "ollama";
+        provider_options.ollama = {
+          model = "deepseek-coder-v2:16b";
+          end_point = "http://127.0.0.1:11434/v1/completions";
+        };
+        virtualtext.auto_trigger_ft = ["*"];
       };
     };
 
@@ -373,6 +408,12 @@
         key = "<leader>a";
         action = ":<C-u>Ollama<CR>";
         options.desc = "Ollama AI Picker (Visual)";
+      }
+      {
+        mode = "n";
+        key = "<leader>aa";
+        action = "<cmd>AvanteChat<CR>";
+        options.desc = "Avante Chat";
       }
       {
         mode = "n";
