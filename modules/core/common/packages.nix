@@ -49,7 +49,7 @@
     nodejs
     mpv # Incredible Video Player
     ncdu # Disk Usage Analyzer With Ncurses Interface
-    nixfmt-rfc-style # Nix Formatter
+    nixfmt # Nix Formatter
     black # Python Formatter
     prettierd # Prettier Formatter Daemon
     nwg-displays #configure monitor configs via GUI

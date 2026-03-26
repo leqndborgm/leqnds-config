@@ -3,6 +3,7 @@
   config,
   pkgs,
   host,
+  lib,
   ...
 }: {
   imports = [
@@ -203,8 +204,8 @@
         "<leader>ps" = "live_grep";
         "<leader>pb" = "buffers";
         "<leader>ph" = "help_tags";
-        "<leader>pt" = "todo-comments";
       };
+      extensions.todo-comments.enable = true;
     };
 
     # LSP
@@ -241,7 +242,7 @@
           nerd_font_variant = "mono";
         };
         sources = {
-          default = ["lsp" "path" "snippets" "buffer" "minuet"];
+          default = ["lsp" "path" "snippets" "buffer"] ++ lib.optionals (host == "work") ["minuet"];
           providers.minuet = {
             name = "minuet";
             module = "minuet.blink";
@@ -254,24 +255,26 @@
     # AI (Ollama - Work only)
     plugins.ollama = {
       enable = host == "work";
-      model = "deepseek-r1:70b"; # Deep reasoning for architecture
-      url = "http://127.0.0.1:11434";
-      prompts = {
-        Refactor = {
-          prompt = "Refactor the following code for better readability and performance. Maintain the same functionality:\n\n```$FT\n$TEXT\n```";
-          action = "replace";
-        };
-        Explain = {
-          prompt = "Explain how this code works in detail:\n\n```$FT\n$TEXT\n```";
-          action = "display";
-        };
-        UnitTests = {
-          prompt = "Generate comprehensive unit tests for this code using the standard testing framework for $FT:\n\n```$FT\n$TEXT\n```";
-          action = "display";
-        };
-        FixBugs = {
-          prompt = "Identify and fix any potential bugs or edge cases in this code:\n\n```$FT\n$TEXT\n```";
-          action = "replace";
+      settings = {
+        model = "deepseek-r1:70b"; # Deep reasoning for architecture
+        url = "http://127.0.0.1:11434";
+        prompts = {
+          Refactor = {
+            prompt = "Refactor the following code for better readability and performance. Maintain the same functionality:\n\n```$FT\n$TEXT\n```";
+            action = "replace";
+          };
+          Explain = {
+            prompt = "Explain how this code works in detail:\n\n```$FT\n$TEXT\n```";
+            action = "display";
+          };
+          UnitTests = {
+            prompt = "Generate comprehensive unit tests for this code using the standard testing framework for $FT:\n\n```$FT\n$TEXT\n```";
+            action = "display";
+          };
+          FixBugs = {
+            prompt = "Identify and fix any potential bugs or edge cases in this code:\n\n```$FT\n$TEXT\n```";
+            action = "replace";
+          };
         };
       };
     };
@@ -319,7 +322,7 @@
         provider = "ollama";
         provider_options.ollama = {
           model = "deepseek-coder-v2:16b";
-          end_point = "http://127.0.0.1:11434/v1/completions";
+          endpoint = "http://127.0.0.1:11434/v1/completions";
         };
         virtualtext.auto_trigger_ft = ["*"];
       };
@@ -399,24 +402,6 @@
       }
       {
         mode = "n";
-        key = "<leader>a";
-        action = "<cmd>Ollama<CR>";
-        options.desc = "Ollama AI Picker";
-      }
-      {
-        mode = "v";
-        key = "<leader>a";
-        action = ":<C-u>Ollama<CR>";
-        options.desc = "Ollama AI Picker (Visual)";
-      }
-      {
-        mode = "n";
-        key = "<leader>aa";
-        action = "<cmd>AvanteChat<CR>";
-        options.desc = "Avante Chat";
-      }
-      {
-        mode = "n";
         key = "s";
         action = config.lib.nixvim.mkRaw "function() require('flash').jump() end";
         options.desc = "Flash Jump";
@@ -444,6 +429,31 @@
         key = "<C-l>";
         action = "<C-w>l";
         options.desc = "Move to right split";
+      }
+      {
+        mode = "n";
+        key = "<leader>pt";
+        action = "<cmd>TodoTelescope<CR>";
+        options.desc = "Todo Telescope";
+      }
+    ] ++ lib.optionals (host == "work") [
+      {
+        mode = "n";
+        key = "<leader>a";
+        action = "<cmd>Ollama<CR>";
+        options.desc = "Ollama AI Picker";
+      }
+      {
+        mode = "v";
+        key = "<leader>a";
+        action = ":<C-u>Ollama<CR>";
+        options.desc = "Ollama AI Picker (Visual)";
+      }
+      {
+        mode = "n";
+        key = "<leader>aa";
+        action = "<cmd>AvanteChat<CR>";
+        options.desc = "Avante Chat";
       }
     ];
   };

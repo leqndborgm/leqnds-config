@@ -1,6 +1,7 @@
-{...}: {
+{lib, ...}: {
   programs.ssh = {
     enable = true;
+    enableDefaultConfig = lib.mkForce false;
     matchBlocks = {
       "github.com" = {
         hostname = "github.com";
