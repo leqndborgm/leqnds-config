@@ -256,7 +256,7 @@
     plugins.ollama = {
       enable = host == "work";
       settings = {
-        model = "deepseek-r1:70b"; # Deep reasoning for architecture
+        model = "qwen3:30b-a3b"; # Thinking + tool calling MoE model
         url = "http://127.0.0.1:11434";
         prompts = {
           Refactor = {
@@ -284,33 +284,36 @@
       enable = host == "work";
       settings = {
         provider = "ollama";
-        vendors.ollama = {
-          __inherited_from = "openai";
-          api_key_name = "";
-          endpoint = "http://127.0.0.1:11434/v1";
-          model = "qwen2.5-coder:32b";
-          parse_curl_args = config.lib.nixvim.mkRaw ''
-            function(opts, code_opts)
-              return {
-                url = opts.endpoint .. "/chat/completions",
-                headers = {
-                  ["Accept"] = "application/json",
-                  ["Content-Type"] = "application/json",
-                },
-                body = {
-                  model = opts.model,
-                  messages = require("avante.providers").openai.parse_messages(code_opts),
-                  max_tokens = 2048,
-                  stream = true,
-                },
-              }
-            end
-          '';
-          parse_response_data = config.lib.nixvim.mkRaw ''
-            function(data_stream, event_state, opts)
-              require("avante.providers").openai.parse_response(data_stream, event_state, opts)
-            end
-          '';
+        auto_suggestions_provider = "ollama";
+        vendors = {
+          ollama = {
+            __inherited_from = "openai";
+            api_key_name = "";
+            endpoint = "http://127.0.0.1:11434/v1";
+            model = "qwen3:30b-a3b";
+            parse_curl_args = config.lib.nixvim.mkRaw ''
+              function(opts, code_opts)
+                return {
+                  url = opts.endpoint .. "/chat/completions",
+                  headers = {
+                    ["Accept"] = "application/json",
+                    ["Content-Type"] = "application/json",
+                  },
+                  body = {
+                    model = opts.model,
+                    messages = require("avante.providers").openai.parse_messages(opts, code_opts),
+                    max_tokens = 2048,
+                    stream = true,
+                  },
+                }
+              end
+            '';
+            parse_response_data = config.lib.nixvim.mkRaw ''
+              function(data_stream, event_state, opts)
+                require("avante.providers").openai.parse_response(data_stream, event_state, opts)
+              end
+            '';
+          };
         };
       };
     };
@@ -319,10 +322,12 @@
     plugins.minuet = {
       enable = host == "work";
       settings = {
-        provider = "ollama";
-        provider_options.ollama = {
+        provider = "openai_fim_compatible";
+        provider_options.openai_fim_compatible = {
           model = "deepseek-coder-v2:16b";
-          endpoint = "http://127.0.0.1:11434/v1/completions";
+          end_point = "http://127.0.0.1:11434/v1/completions";
+          name = "ollama";
+          api_key = "TERM";
         };
         virtualtext.auto_trigger_ft = ["*"];
       };
@@ -454,6 +459,30 @@
         key = "<leader>aa";
         action = "<cmd>AvanteChat<CR>";
         options.desc = "Avante Chat";
+      }
+      {
+        mode = "i";
+        key = "<A-y>";
+        action = config.lib.nixvim.mkRaw "function() require('minuet.virtualtext').action.accept() end";
+        options.desc = "Minuet Accept";
+      }
+      {
+        mode = "i";
+        key = "<A-n>";
+        action = config.lib.nixvim.mkRaw "function() require('minuet.virtualtext').action.next() end";
+        options.desc = "Minuet Next";
+      }
+      {
+        mode = "i";
+        key = "<A-p>";
+        action = config.lib.nixvim.mkRaw "function() require('minuet.virtualtext').action.prev() end";
+        options.desc = "Minuet Prev";
+      }
+      {
+        mode = "i";
+        key = "<A-x>";
+        action = config.lib.nixvim.mkRaw "function() require('minuet.virtualtext').action.dismiss() end";
+        options.desc = "Minuet Dismiss";
       }
     ];
   };

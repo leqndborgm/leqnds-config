@@ -8,5 +8,6 @@
     python313Packages.mcp # MCP Python SDK
     slack # Slack Client
     zoom-us # Video Conferene Tool
+    oterm   # Ollama TUI
   ];
 }
