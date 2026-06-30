@@ -1,13 +1,18 @@
 {pkgs, ...}: {
   programs.kitty = {
     enable = true;
-    package = pkgs.kitty;
     settings = {
       font_size = 12;
       wheel_scroll_min_lines = 1;
       window_padding_width = 4;
       confirm_os_window_close = 0;
       scrollback_lines = 10000;
+      # Disable config auto-reload. The watcher (kitten __watch_conf__) follows
+      # the home-manager symlink recursively into /nix/store (~440k inotify
+      # watches) and exhausts fs.inotify.max_user_watches -> ENOSPC.
+      # NOTE: the old name `watch_for_conf_changes` is ignored by kitty; the
+      # current option is `auto_reload_config`, and a negative value disables it.
+      auto_reload_config = -1;
       enable_audio_bell = false;
       mouse_hide_wait = 60;
       cursor_trail = 1;
