@@ -4,5 +4,6 @@
     ./user.nix
     ./packages.nix
     ./ai.nix
+    ./thinkfan.nix
   ];
 }

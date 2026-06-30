@@ -6,7 +6,14 @@
 }: {
   networking = {
     hostName = "${host}";
-    networkmanager.enable = true;
+    networkmanager = {
+      enable = true;
+      plugins = with pkgs; [networkmanager-openvpn];
+      settings = {
+        device."wifi.scan-rand-mac-address" = "no";
+        connection."wifi.powersave" = 3;
+      };
+    };
     timeServers = options.networking.timeServers.default ++ ["pool.ntp.org"];
     firewall = {
       enable = true;
