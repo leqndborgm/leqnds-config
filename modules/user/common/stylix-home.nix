@@ -7,5 +7,7 @@
       light = "Papirus-Light";
     };
     targets.kitty.variant256Colors = true;
+    targets.ghostty.enable = false;
+    targets.neovim.enable = false;
   };
 }
