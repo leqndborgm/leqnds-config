@@ -9,6 +9,7 @@ in {
   stylix = {
     enable = true;
     targets.plymouth.enable = true;
+    targets.kmscon.enable = false;
     image = stylixImage;
     polarity = "dark";
     opacity.terminal = 0.6;
@@ -17,19 +18,19 @@ in {
       base00 = "0a0a10";
       base01 = "151521";
       base02 = "222233";
-      base03 = "33334d";
-      base04 = "5aa0af"; # dunkleres Cyan
-      base05 = "c8c8e0"; # helles, entsättigtes Grau
-      base06 = "8f6acb"; # gedeckteres Lila
+      base03 = "7eb8c8"; # comments — teal, readable on transparency
+      base04 = "5aa0af"; # darker cyan
+      base05 = "c8c8e0"; # light desaturated grey
+      base06 = "8f6acb"; # muted purple
       base07 = "d0d0f0";
-      base08 = "d36fa3"; # dunkleres Pink
-      base09 = "c08050"; # gedecktes Orange
-      base0A = "c7c96d"; # gedecktes Gelbgrün
-      base0B = "64af6a"; # dunkles Grün
-      base0C = "5faebc"; # graublau
-      base0D = "505caa"; # dunkles Violettblau
-      base0E = "8f6acb"; # gedeckteres Lila
-      base0F = "b04c4c"; # dunkles Rot
+      base08 = "d36fa3"; # darker pink
+      base09 = "c08050"; # muted orange
+      base0A = "c7c96d"; # muted yellow-green
+      base0B = "64af6a"; # dark green
+      base0C = "5faebc"; # grey-blue
+      base0D = "505caa"; # dark violet-blue
+      base0E = "8f6acb"; # muted purple
+      base0F = "b04c4c"; # dark red
     };
 
     cursor = {

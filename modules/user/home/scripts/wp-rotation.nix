@@ -5,8 +5,13 @@ pkgs.writeShellScriptBin "wp-rotation" ''
   WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
   INTERVAL=300  # Alle 5 Minuten
 
-  if ! pgrep -x "swww-daemon" > /dev/null; then
-    swww-daemon &
+  # Kill existing wp-rotation processes (except this one)
+  for pid in $(pidof -o %PPID -x wp-rotation); do
+    kill $pid
+  done
+
+  if ! pgrep -x "awww-daemon" > /dev/null; then
+    ${pkgs.awww}/bin/awww-daemon &
     sleep 1
   fi
 
@@ -15,7 +20,7 @@ pkgs.writeShellScriptBin "wp-rotation" ''
 
     if [ -n "$FILE" ]; then
       echo "✅ Wechsle Wallpaper: $FILE"
-      swww img "$FILE" --transition-type any --transition-duration 2
+      ${pkgs.awww}/bin/awww img "$FILE" --transition-type random --transition-duration 2
     else
       echo "⚠️  Keine JPG-Dateien gefunden in $WALLPAPER_DIR (inkl. Symlinks)"
     fi

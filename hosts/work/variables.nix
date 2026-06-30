@@ -23,7 +23,7 @@
   printEnable = true;
 
   # Set Stylix Image
-  stylixImage = ../../wallpapers/holdingHands.jpg;
+  stylixImage = ../../wallpapers/lucyfront.jpg;
 
   # Set Waybar
   waybarChoice = ../../modules/user/common/waybar/waybar-alt.nix;

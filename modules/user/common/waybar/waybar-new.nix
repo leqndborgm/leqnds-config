@@ -55,7 +55,7 @@ in
           };
 
           "cpu" = {
-            intervall = 5;
+            interval = 5;
             format = " {usage:2}%";
             tooltip = true;
           };

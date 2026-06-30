@@ -2,10 +2,11 @@
   pkgs,
   inputs,
   ...
-}: {
+}:
+{
   programs = {
     firefox.enable = false; # Firefox is not installed by default
-    hyprland.enable = true; #someone forgot to set this so desktop file is created
+    hyprland.enable = true; # someone forgot to set this so desktop file is created
     dconf.enable = true;
     seahorse.enable = true;
     fuse.userAllowOther = true;
@@ -29,12 +30,12 @@
     clamav # Antivirus
     clamtk # Antivirus Frontend
     cmatrix # Matrix Movie Effect In Terminal
-    direnv #Direnv for presentation tool
+    direnv # Direnv for presentation tool
     duf # Utility For Viewing Disk Usage In Terminal
     eza # Beautiful ls Replacement
     file-roller # Archive Manager
     firefox # Firefox
-    mesa-demos #glxinfo (renamed) needed for inxi diag util
+    mesa-demos # glxinfo (renamed) needed for inxi diag util
     gemini-cli # Googles AI assistant
     tuigreet # The Login Manager (Sometimes Referred To As Display Manager)
     htop # Simple Terminal Based System Monitor
@@ -52,15 +53,15 @@
     nixfmt # Nix Formatter
     black # Python Formatter
     prettierd # Prettier Formatter Daemon
-    nwg-displays #configure monitor configs via GUI
+    nwg-displays # configure monitor configs via GUI
     nemo # File Manager
-    onefetch #provides zsaneyos build info on current system
-    obsidian #for better organising
+    onefetch # provides zsaneyos build info on current system
+    obsidian # for better organising
     pavucontrol # For Editing Audio Levels & Devices
     pciutils # Collection Of Tools For Inspecting PCI Devices
     pkg-config # Wrapper Script For Allowing Packages To Get Info On Others
     playerctl # Allows Changing Media Volume Through Scripts
-    php #php language
+    php # php language
     python3
     ripgrep # Improved Grep
     socat # Needed For Screenshots
@@ -68,11 +69,14 @@
     unzip # Tool For Handling .zip Files
     usbutils # Good Tools For USB Devices
     wget # Tool For Fetching Files With Links
-    yazi #TUI File Manager
-    jetbrains-toolbox #For Jetbrains IDEs
+    yazi # TUI File Manager
+    jetbrains-toolbox # For Jetbrains IDEs
     gcc
     cmake
     gdb
     clang
+    wireshark # Powerfull network protocoll analyzer
+    gns3-gui # Graphical Network Simulator 3 GUI
+    gns3-server # Graphical Network Simulatur 3 Server
   ];
 }
