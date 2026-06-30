@@ -12,18 +12,75 @@
     ;
 in {
   home.packages = with pkgs; [
-    swww
+    awww
     grim
     slurp
     wl-clipboard
     swappy
+    jq
     ydotool
     hyprpolkitagent
     hyprland-qtutils # needed for banners and ANR messages
+    hyprsunset # blue-light filter daemon, toggled via toggle-bluelight
   ];
+
+  home.file."Pictures/Screenshots/.keep".text = "";
   systemd.user.targets.hyprland-session.Unit.Wants = [
     "xdg-desktop-autostart.target"
   ];
+
+  systemd.user.services.swww-daemon = {
+    Unit = {
+      Description = "swww wallpaper daemon";
+      PartOf = ["graphical-session.target"];
+    };
+    Service = {
+      ExecStart = "${pkgs.awww}/bin/awww-daemon";
+      Restart = "on-failure";
+      RestartSec = "3s";
+    };
+    Install = {
+      WantedBy = ["graphical-session.target"];
+    };
+  };
+
+  systemd.user.services.set-wallpaper = {
+    Unit = {
+      Description = "Set stylix wallpaper via swww";
+      After = ["swww-daemon.service"];
+      Requires = ["swww-daemon.service"];
+      PartOf = ["graphical-session.target"];
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = toString (pkgs.writeShellScript "set-wallpaper" ''
+        sleep 2
+        ${pkgs.awww}/bin/awww img ${stylixImage}
+      '');
+      RemainAfterExit = true;
+    };
+    Install = {
+      WantedBy = ["graphical-session.target"];
+    };
+  };
+  # Blue-light filter daemon. Starts in identity mode (filter off); the
+  # toggle-bluelight script flips it on/off via `hyprctl hyprsunset …`.
+  systemd.user.services.hyprsunset = {
+    Unit = {
+      Description = "hyprsunset blue-light filter daemon";
+      PartOf = ["graphical-session.target"];
+      After = ["graphical-session.target"];
+    };
+    Service = {
+      ExecStart = "${pkgs.hyprsunset}/bin/hyprsunset --identity";
+      Restart = "on-failure";
+      RestartSec = "3s";
+    };
+    Install = {
+      WantedBy = ["graphical-session.target"];
+    };
+  };
+
   # Place Files Inside Home Directory
   home.file = {
     "Pictures/Wallpapers" = {
@@ -36,6 +93,7 @@ in {
   wayland.windowManager.hyprland = {
     enable = true;
     package = pkgs.hyprland;
+    configType = "hyprlang";
     systemd = {
       enable = true;
       enableXdgAutostart = true;
@@ -51,15 +109,8 @@ in {
         "wl-paste --type image --watch cliphist store # Stores only image data"
         "dbus-update-activation-environment --all --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
         "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-        "systemctl --user start hyprpolkitagent"
-        "killall -q swww;sleep .5 && swww init"
-        "killall -q waybar;sleep .5 && waybar"
-        "killall -q swaync;sleep .5 && swaync"
-        "nm-applet --indicator"
+        "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent"
         "pypr &"
-        "sleep 1.5 && swww img ${stylixImage}"
-        "swww-daemon &"
-        "sleep 1 && ~/.config/hypr/scripts/wp-rotation.sh"
       ];
 
       input = {
@@ -98,14 +149,12 @@ in {
         disable_hyprland_logo = true;
         disable_splash_rendering = true;
         enable_swallow = false;
-        vfr = true; # Variable Frame Rate
         vrr = 0; #Variable Refresh Rate  Might need to set to 0 for NVIDIA/AQ_DRM_DEVICES
         # Screen flashing to black momentarily or going black when app is fullscreen
         # Try setting vrr to 0
       };
 
       dwindle = {
-        pseudotile = true;
         preserve_split = true;
       };
 
@@ -139,6 +188,21 @@ in {
         mfact = 0.5;
       };
 
+      # Frosted-glass blur for the AGS notification surfaces. The gtk-layer-shell
+      # namespaces are set explicitly on the Astal windows (namespace=…). Without
+      # blur the translucent panels render as a flat dark slab over the wallpaper.
+      # NOTE: Hyprland 0.55 changed the INI layerrule syntax — effects are now
+      # `field = value` pairs and the matcher is `match:namespace = <regex>`.
+      # Booleans use `= on`; valued effects like ignore_alpha take a bare value.
+      layerrule = [
+        "blur = on, match:namespace = notification-center"
+        "ignore_alpha 0.15, match:namespace = notification-center"
+        "blur = on, match:namespace = notif-popups"
+        "ignore_alpha 0.15, match:namespace = notif-popups"
+        "blur = on, match:namespace = launcher"
+        "ignore_alpha 0.15, match:namespace = launcher"
+      ];
+
       env = [
         "NIXOS_OZONE_WL, 1"
         "NIXPKGS_ALLOW_UNFREE, 1"
@@ -152,7 +216,15 @@ in {
         "QT_AUTO_SCREEN_SCALE_FACTOR, 1"
         "SDL_VIDEODRIVER, x11"
         "MOZ_ENABLE_WAYLAND, 1"
-        # "AQ_DRM_DEVICES,/dev/dri/card0:/dev/dri/card1"
+        # First entry is the primary (card1 = Intel iGPU, drives eDP-1); the
+        # NVIDIA dGPU (card2) must be listed too or Hyprland never enumerates
+        # HDMI-A-3, since the external port is wired to the dGPU.
+        # card0 = EFI simple-framebuffer, NOT a real GPU — do not use it.
+        # NOTE: do NOT use /dev/dri/by-path/* here — AQ_DRM_DEVICES separates
+        # entries with ':', and the by-path names contain ':' themselves
+        # (pci-0000:00:02.0), so Aquamarine splits them into garbage, finds no
+        # GPU, and aborts. Use the plain card nodes.
+        "AQ_DRM_DEVICES,/dev/dri/card1:/dev/dri/card0"
         "GDK_SCALE,1"
         "QT_SCALE_FACTOR,1"
         "EDITOR,nvim"
@@ -162,6 +234,7 @@ in {
     extraConfig = "
       monitor=,preferred,auto,auto
       ${extraMonitorSettings}
+      source = ~/.config/hypr/monitors.conf
     ";
   };
 }

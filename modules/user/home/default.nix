@@ -1,12 +1,11 @@
-{host, ...}: let
-  inherit (import ../../../hosts/${host}/variables.nix) waybarChoice;
-in {
+{...}: {
   imports = [
     ./amfora.nix
     ./cava.nix
     ./binds.nix
     ./emoji.nix
     ./scripts
+    ../common/ags
     ../common/bash.nix
     ../common/bashrc-personal.nix
     ../common/btop.nix
@@ -14,6 +13,7 @@ in {
     ../common/gh.nix
     ../common/ghostty.nix
     ../common/git.nix
+    ../common/gtk.nix
     ../common/htop.nix
     ../common/hyprland
     ../common/kitty.nix
@@ -26,9 +26,7 @@ in {
     ../common/stylix.nix
     ../common/stylix-home.nix
     ../common/swappy.nix
-    ../common/swaync.nix
     ../common/virtmanager.nix
-    waybarChoice
     ../common/wezterm.nix
     ../common/wlogout
     ../common/xdg.nix

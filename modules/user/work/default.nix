@@ -1,7 +1,10 @@
-{host, ...}: let
-  inherit (import ../../../hosts/${host}/variables.nix) waybarChoice;
-in {
+{...}: {
+  systemd.user.sessionVariables = {
+    AQ_DRM_DEVICES = "/dev/dri/card1:/dev/dri/card2";
+  };
+
   imports = [
+    ../common/ags
     ../common/bash.nix
     ../common/bashrc-personal.nix
     ../common/btop.nix
@@ -20,9 +23,7 @@ in {
     ../common/stylix.nix
     ../common/stylix-home.nix
     ../common/swappy.nix
-    ../common/swaync.nix
     ../common/virtmanager.nix
-    waybarChoice
     ../common/wezterm.nix
     ../common/wlogout
     ../common/xdg.nix

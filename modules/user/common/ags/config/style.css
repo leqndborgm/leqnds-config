@@ -1,0 +1,1284 @@
+/* ═══════════════════════════════════════════════════════════
+   Colors are prepended from Stylix at build time (colors.css)
+
+   Soft-Glass theme — tuned to the muted blue-violet wallpaper palette:
+     base00/01  deep blue-black backgrounds
+     base05     lavender-grey text
+     base03/0C  teal        → primary accent
+     base0E     muted purple → secondary accent
+     base0B     green (charging) · base0F/08 red/pink (alerts)
+
+   Design language: translucent glass pills, hairline borders, soft
+   depth shadows — no neon glow. Calm, cohesive, matches the background.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ───────────── ANIMATIONS ───────────── */
+
+@keyframes soft-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes notif-in {
+  from { opacity: 0; margin-right: -340px; }
+  to   { opacity: 1; margin-right: 0; }
+}
+
+@keyframes osd-in {
+  from { opacity: 0; margin-bottom: 12px; }
+  to   { opacity: 1; margin-bottom: 24px; }
+}
+
+@keyframes launcher-in {
+  from { opacity: 0; margin-top: 48px; }
+  to   { opacity: 1; margin-top: 72px; }
+}
+
+/* ───────────── GLOBAL ───────────── */
+
+* {
+  font-family: "CaskaydiaCove Nerd Font", "JetBrainsMono Nerd Font", sans-serif;
+  font-size: 13px;
+  color: @base05;
+  border: none;
+  outline: none;
+}
+
+/* ───────────── BAR WINDOW ───────────── */
+
+.bar-window {
+  background: transparent;
+}
+
+.bar {
+  background: transparent;
+  padding: 6px 8px;
+}
+
+/* Shared glass pill container — soft translucent fill, hairline border,
+   gentle drop shadow for depth (rendered once, no animation → no CPU spin). */
+.bar-left,
+.bar-center,
+.bar-right {
+  background: linear-gradient(180deg, alpha(@base01, 0.72), alpha(@base00, 0.78));
+  border: 1px solid alpha(@base05, 0.07);
+  border-radius: 16px;
+  padding: 3px 8px;
+  margin: 0 4px;
+  box-shadow: 0 2px 14px alpha(@base00, 0.45);
+}
+
+.bar-center {
+  padding: 3px 20px;
+  border-top: 1px solid alpha(@base0C, 0.16);
+}
+
+/* ───────────── LAUNCHER ───────────── */
+
+.bar-launcher {
+  background: alpha(@base0C, 0.10);
+  border-radius: 11px;
+  padding: 3px 11px;
+  margin-right: 4px;
+  font-size: 16px;
+  color: @base0C;
+  transition: background 200ms ease, color 200ms ease;
+}
+
+.bar-launcher:hover {
+  background: alpha(@base0C, 0.20);
+  color: @base03;
+}
+
+/* ───────────── WORKSPACES ───────────── */
+
+.workspaces {
+  padding: 0 2px;
+}
+
+.workspace-btn {
+  background: transparent;
+  border-radius: 8px;
+  padding: 2px 8px;
+  min-width: 12px;
+  color: alpha(@base05, 0.40);
+  font-size: 12px;
+  transition: all 180ms ease;
+}
+
+.workspace-btn:hover {
+  color: @base05;
+  background: alpha(@base05, 0.07);
+}
+
+.workspace-btn.active {
+  color: @base07;
+  background: linear-gradient(135deg, alpha(@base0C, 0.30), alpha(@base0E, 0.30));
+  box-shadow: inset 0 0 0 1px alpha(@base0C, 0.30);
+  font-weight: bold;
+}
+
+/* ───────────── WINDOW TITLE ───────────── */
+
+.window-title {
+  color: alpha(@base05, 0.55);
+  font-size: 12px;
+  padding: 0 10px;
+}
+
+/* ───────────── CLOCK ───────────── */
+
+.clock-box {
+  padding: 1px 4px;
+}
+
+.clock-time {
+  font-size: 15px;
+  font-weight: bold;
+  color: @base05;
+  letter-spacing: 0.4px;
+}
+
+.clock-date {
+  font-size: 10px;
+  color: alpha(@base03, 0.75);
+}
+
+/* ───────────── GENERIC MODULE ───────────── */
+
+.bar-module {
+  background: transparent;
+  border-radius: 9px;
+  padding: 2px 8px;
+  transition: all 180ms ease;
+}
+
+.bar-module:hover {
+  background: alpha(@base05, 0.07);
+  color: @base03;
+}
+
+/* ───────────── AUDIO ───────────── */
+
+.audio.muted { color: alpha(@base05, 0.40); }
+
+/* ───────────── BATTERY ───────────── */
+
+.battery.charging { color: @base0B; }
+.battery.low      { color: @base08; }
+
+/* ───────────── NOTIF BUTTON ───────────── */
+
+.notif-btn { color: alpha(@base05, 0.70); }
+
+.notif-btn.has-notifs {
+  color: @base0C;
+}
+
+/* ───────────── TRAY ───────────── */
+
+.tray { padding: 0 1px; }
+
+/* The tray icons are GTK4 `menubutton`/`button` widgets which ship their own
+   frame, background and focus ring from the default theme. We strip all of it
+   so only the bare icon shows, then add our own subtle rounded hover. The inner
+   `> button` selector is essential: a menubutton wraps an internal button that
+   would otherwise still paint a border. */
+.tray-item,
+.tray-item > button {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+}
+
+.tray-item {
+  border-radius: 9px;
+  padding: 3px 6px;
+  transition: background 150ms ease;
+}
+
+.tray-item:hover {
+  background: alpha(@base05, 0.10);
+}
+
+.tray-item > button:hover {
+  background: transparent;
+}
+
+.tray-item image {
+  -gtk-icon-size: 16px;
+  opacity: 0.92;
+}
+
+/* Network button lives inside the tray group; match tray sizing but keep glyph readable */
+.tray-item.network label {
+  font-size: 15px;
+  color: @base0C;
+}
+
+.tray-item.network:hover label {
+  color: @base03;
+}
+
+/* ───────────── NOTIFICATION CENTER ───────────── */
+
+.notification-center {
+  background: transparent;
+}
+
+/* Floating panel — playful retro / CRT treatment.
+   Hyprland blurs this surface (layerrule on the `notification-center`
+   namespace), so the background is kept translucent to read as frosted glass
+   instead of a flat dark slab. Two stacked layers: faint CRT scanlines on top
+   of a translucent tinted fill. A teal accent outline + inset highlight give
+   it a chunky retro "device" frame. */
+.notif-panel {
+  background-image:
+    repeating-linear-gradient(0deg,
+      transparent 0px, transparent 2px,
+      alpha(@base00, 0.16) 2px, alpha(@base00, 0.16) 4px),
+    linear-gradient(150deg, alpha(@base01, 0.60), alpha(@base00, 0.66));
+  border: 1.5px solid alpha(@base0C, 0.28);
+  border-radius: 18px;
+  min-width: 390px;
+  margin: 10px 10px 10px 0;
+  padding: 14px 14px;
+  box-shadow:
+    0 10px 40px alpha(@base00, 0.50),
+    inset 0 0 0 1px alpha(@base05, 0.05),
+    inset 0 0 28px alpha(@base0C, 0.06);
+}
+
+/* Retro header bar: blocky, uppercase, wide letter-spacing, glowing rule */
+.notif-header {
+  padding: 3px 4px 13px 4px;
+  margin-bottom: 4px;
+  background-image: linear-gradient(90deg, alpha(@base0C, 0.6), alpha(@base0E, 0.5), transparent);
+  background-size: 100% 2px;
+  background-position: bottom;
+  background-repeat: no-repeat;
+}
+
+.notif-header-title {
+  font-size: 13px;
+  font-weight: bold;
+  color: @base0C;
+  letter-spacing: 3px;
+  text-shadow: 0 0 8px alpha(@base0C, 0.45);
+}
+
+/* Count rendered as a retro bracketed tag, e.g. [ 03 ] */
+.notif-count {
+  margin-left: 9px;
+  font-size: 12px;
+  font-weight: bold;
+  color: @base0E;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px alpha(@base0E, 0.4);
+}
+
+.notif-clear-btn, .notif-close-panel-btn {
+  border-radius: 9px;
+  padding: 4px 11px;
+  font-size: 11px;
+  color: alpha(@base05, 0.65);
+  transition: all 150ms ease;
+}
+
+.notif-clear-btn {
+  background: alpha(@base05, 0.06);
+}
+
+.notif-clear-btn:hover {
+  background: alpha(@base0F, 0.16);
+  color: @base0F;
+}
+
+.notif-close-panel-btn {
+  background: transparent;
+  padding: 4px 9px;
+}
+
+.notif-close-panel-btn:hover {
+  background: alpha(@base05, 0.12);
+  color: @base05;
+}
+
+/* Empty state — centered icon + caption */
+.notif-empty {
+  padding: 48px 24px;
+}
+
+.notif-empty-icon {
+  font-size: 40px;
+  color: alpha(@base0C, 0.30);
+  text-shadow: 0 0 14px alpha(@base0C, 0.25);
+}
+
+.notif-empty-text {
+  font-size: 12px;
+  color: alpha(@base05, 0.42);
+  letter-spacing: 3px;
+}
+
+/* Slim, unobtrusive scrollbar for the notification list */
+.notif-panel scrollbar {
+  background: transparent;
+}
+
+.notif-panel scrollbar slider {
+  background: alpha(@base05, 0.16);
+  border-radius: 6px;
+  min-width: 5px;
+}
+
+.notif-panel scrollbar slider:hover {
+  background: alpha(@base05, 0.30);
+}
+
+/* ═══ Timeline notifications ═══
+   New structural concept (not cards): the center renders notifications as a
+   vertical TIMELINE. Each app icon is a circular node sitting on a continuous
+   accent rail; the text flows to the right — no boxes, no per-item borders.
+   Popups reuse the same circular node and add a teal→purple underline accent,
+   echoing the waybar's gradient language while staying clearly distinct. */
+
+/* ── Center timeline entry ── */
+.notif-item {
+  padding: 0;
+}
+
+/* Node column. The rail is a thin vertical line painted down the centre via a
+   masked gradient; because the list uses zero spacing, adjacent entries' rails
+   join into one continuous line. The opaque node chip sits on top. */
+.notif-node {
+  min-width: 42px;
+  background-image: linear-gradient(90deg,
+    transparent 47.5%, alpha(@base0C, 0.32) 47.5%,
+    alpha(@base0C, 0.32) 52.5%, transparent 52.5%);
+}
+
+.notif-item.critical .notif-node {
+  background-image: linear-gradient(90deg,
+    transparent 47.5%, alpha(@base0F, 0.42) 47.5%,
+    alpha(@base0F, 0.42) 52.5%, transparent 52.5%);
+}
+
+/* Circular node chip — opaque so it masks the rail, with a glowing ring */
+.notif-icon-chip {
+  background: @base00;
+  border-radius: 999px;
+  padding: 7px;
+  margin-top: 15px;
+  min-width: 18px;
+  min-height: 18px;
+  box-shadow: 0 0 0 2px alpha(@base0C, 0.45), 0 0 9px alpha(@base0C, 0.30);
+}
+
+.notif-item.critical .notif-icon-chip,
+.notif-popup.critical .notif-icon-chip {
+  box-shadow: 0 0 0 2px alpha(@base0F, 0.50), 0 0 9px alpha(@base0F, 0.30);
+}
+
+.notif-icon {
+  -gtk-icon-size: 18px;
+  opacity: 0.95;
+}
+
+/* Content column — solid, opaque card so each notification stays fully legible
+   and clearly raised above the translucent frosted panel behind it. The node
+   column to the left stays transparent, so the rail + circular nodes remain
+   continuous in the gaps between cards. */
+.notif-content {
+  background: linear-gradient(150deg, @base02, @base01);
+  border: 1px solid alpha(@base05, 0.07);
+  border-radius: 12px;
+  padding: 11px 13px 13px 13px;
+  margin: 4px 8px 4px 2px;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.notif-item:hover .notif-content {
+  background: @base02;
+  border-color: alpha(@base05, 0.13);
+}
+
+.notif-item.critical .notif-content {
+  border-color: alpha(@base0F, 0.30);
+}
+
+.notif-app-name {
+  font-size: 11px;
+  font-weight: bold;
+  color: @base0C;
+}
+
+.notif-item.critical .notif-app-name,
+.notif-popup.critical .notif-app-name {
+  color: @base0F;
+}
+
+.notif-sep {
+  font-size: 11px;
+  color: alpha(@base05, 0.32);
+}
+
+.notif-time {
+  font-size: 10px;
+  color: alpha(@base05, 0.42);
+}
+
+/* Close button is invisible until the row (or popup) is hovered */
+.notif-close {
+  background: transparent;
+  border-radius: 7px;
+  padding: 0 6px;
+  color: transparent;
+  font-size: 12px;
+  transition: all 130ms ease;
+}
+
+.notif-item:hover .notif-close,
+.notif-popup:hover .notif-close {
+  color: alpha(@base05, 0.55);
+}
+
+.notif-close:hover {
+  background: alpha(@base0F, 0.16);
+  color: @base0F;
+}
+
+.notif-summary {
+  font-size: 14px;
+  font-weight: bold;
+  color: @base05;
+  margin-top: 3px;
+}
+
+.notif-body {
+  font-size: 12px;
+  color: alpha(@base05, 0.60);
+  margin-top: 1px;
+}
+
+.notif-actions {
+  margin-top: 9px;
+}
+
+.notif-action {
+  background: alpha(@base0C, 0.10);
+  border: 1px solid alpha(@base0C, 0.24);
+  border-radius: 9px;
+  padding: 5px 12px;
+  color: @base0C;
+  font-size: 12px;
+  transition: all 150ms ease;
+}
+
+.notif-action:hover {
+  background: alpha(@base0C, 0.24);
+  color: @base03;
+}
+
+/* ── Popups: circular node + teal→purple underline accent ── */
+
+.notif-popup-window {
+  background: transparent;
+}
+
+.notif-popup {
+  background-image:
+    linear-gradient(90deg, @base0C, @base0E),
+    repeating-linear-gradient(0deg,
+      transparent 0px, transparent 2px,
+      alpha(@base00, 0.14) 2px, alpha(@base00, 0.14) 4px),
+    linear-gradient(150deg, alpha(@base01, 0.66), alpha(@base00, 0.72));
+  background-size: 100% 2px, 100% 100%, 100% 100%;
+  background-position: bottom, center, center;
+  background-repeat: no-repeat, repeat, no-repeat;
+  border: 1.5px solid alpha(@base0C, 0.26);
+  border-radius: 16px;
+  padding: 14px 16px;
+  min-width: 350px;
+  margin: 8px 8px 0 8px;
+  box-shadow: 0 8px 30px alpha(@base00, 0.55), inset 0 0 0 1px alpha(@base05, 0.04);
+  animation: notif-in 200ms ease;
+}
+
+.notif-popup.critical {
+  background-image:
+    linear-gradient(90deg, @base0F, @base08),
+    repeating-linear-gradient(0deg,
+      transparent 0px, transparent 2px,
+      alpha(@base00, 0.14) 2px, alpha(@base00, 0.14) 4px),
+    linear-gradient(150deg, alpha(@base01, 0.66), alpha(@base00, 0.72));
+  border-color: alpha(@base0F, 0.40);
+}
+
+/* Popups have no rail, so the chip needs no top offset and the content no
+   left inset */
+.notif-popup .notif-icon-chip {
+  margin-top: 2px;
+}
+
+.notif-popup .notif-content {
+  padding: 0;
+}
+
+/* ───────────── NETWORK POPUP ───────────── */
+
+.network-popup {
+  background: transparent;
+}
+
+.net-panel {
+  background: alpha(@base00, 0.97);
+  border: 1px solid alpha(@base05, 0.09);
+  border-radius: 18px;
+  min-width: 340px;
+  padding: 14px 12px;
+  margin: 6px 8px 0 0;
+  box-shadow: 0 10px 44px alpha(@base00, 0.5);
+}
+
+.net-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid alpha(@base02, 0.7);
+}
+
+.net-header-title {
+  font-size: 15px;
+  font-weight: bold;
+  color: @base05;
+}
+
+.net-scanning {
+  font-size: 11px;
+  color: alpha(@base05, 0.55);
+  margin-right: 6px;
+}
+
+.net-wifi-switch {
+  margin-right: 4px;
+}
+
+.net-close-btn {
+  background: alpha(@base02, 0.6);
+  border-radius: 9px;
+  padding: 2px 9px;
+  font-size: 11px;
+  color: alpha(@base05, 0.7);
+  transition: all 150ms ease;
+}
+
+.net-close-btn:hover {
+  background: alpha(@base05, 0.14);
+  color: @base05;
+}
+
+.net-scroll {
+  margin: 2px 0;
+}
+
+.net-empty {
+  color: alpha(@base05, 0.35);
+  padding: 24px;
+}
+
+/* Access point row */
+.net-ap {
+  background: transparent;
+  border-radius: 11px;
+  padding: 7px 10px;
+  transition: all 150ms ease;
+}
+
+.net-ap:hover {
+  background: alpha(@base05, 0.07);
+}
+
+.net-ap.active {
+  background: linear-gradient(135deg, alpha(@base0C, 0.18), alpha(@base0E, 0.16));
+  box-shadow: inset 0 0 0 1px alpha(@base0C, 0.35);
+}
+
+.net-ap-icon {
+  color: @base0C;
+  font-size: 15px;
+}
+
+.net-ap-ssid {
+  font-size: 13px;
+  color: @base05;
+}
+
+.net-ap-lock {
+  color: alpha(@base05, 0.55);
+  font-size: 12px;
+}
+
+.net-ap-saved {
+  color: alpha(@base0B, 0.8);
+  font-size: 12px;
+}
+
+.net-ap-check {
+  color: @base0B;
+  font-size: 14px;
+}
+
+/* Inline password entry */
+.net-pw-row {
+  padding: 6px 8px 8px 8px;
+}
+
+.net-pw-entry {
+  background: alpha(@base01, 0.9);
+  border: 1px solid alpha(@base05, 0.12);
+  border-radius: 9px;
+  padding: 5px 9px;
+  color: @base05;
+  transition: border-color 150ms ease;
+}
+
+.net-pw-entry:focus {
+  border-color: alpha(@base0C, 0.55);
+}
+
+.net-pw-connect {
+  background: alpha(@base0C, 0.12);
+  border: 1px solid alpha(@base0C, 0.35);
+  border-radius: 9px;
+  padding: 5px 12px;
+  color: @base0C;
+  font-size: 12px;
+  transition: all 150ms ease;
+}
+
+.net-pw-connect:hover {
+  background: alpha(@base0C, 0.26);
+  color: @base03;
+}
+
+/* VPN section */
+.net-vpn-section {
+  padding-top: 10px;
+  border-top: 1px solid alpha(@base02, 0.7);
+}
+
+.net-section-title {
+  font-size: 11px;
+  font-weight: bold;
+  color: alpha(@base05, 0.55);
+  padding: 0 4px 2px 4px;
+}
+
+.net-vpn {
+  background: transparent;
+  border-radius: 11px;
+  padding: 7px 10px;
+  transition: all 150ms ease;
+}
+
+.net-vpn:hover {
+  background: alpha(@base05, 0.07);
+}
+
+.net-vpn.active {
+  background: alpha(@base0B, 0.12);
+  box-shadow: inset 0 0 0 1px alpha(@base0B, 0.32);
+}
+
+.net-vpn-icon {
+  color: @base0E;
+  font-size: 14px;
+}
+
+.net-vpn-name {
+  font-size: 13px;
+  color: @base05;
+}
+
+.net-vpn-state {
+  font-size: 11px;
+  color: alpha(@base05, 0.55);
+}
+
+.net-vpn.active .net-vpn-state {
+  color: @base0B;
+}
+
+.net-advanced-btn {
+  background: alpha(@base02, 0.5);
+  border-radius: 11px;
+  padding: 7px 12px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: alpha(@base05, 0.7);
+  transition: all 150ms ease;
+}
+
+.net-advanced-btn:hover {
+  background: alpha(@base0C, 0.12);
+  color: @base0C;
+}
+
+/* ───────────── BLUETOOTH ───────────── */
+
+.tray-item.bluetooth label {
+  font-size: 15px;
+  color: @base0E;
+}
+
+.tray-item.bluetooth:hover label {
+  color: @base0C;
+}
+
+/* ───────────── BLUE-LIGHT FILTER ───────────── */
+
+.tray-item.bluelight label {
+  font-size: 15px;
+  color: @base05;
+  opacity: 0.85;
+}
+
+.tray-item.bluelight:hover label {
+  color: @base0A;
+  opacity: 1;
+}
+
+/* Filter active → warm amber glow so the state reads at a glance */
+.tray-item.bluelight.active label {
+  color: @base0A;
+  opacity: 1;
+  text-shadow: 0 0 8px alpha(@base0A, 0.55);
+}
+
+.bluetooth-popup {
+  background: transparent;
+}
+
+.bt-panel {
+  background: alpha(@base00, 0.97);
+  border: 1px solid alpha(@base05, 0.09);
+  border-radius: 18px;
+  min-width: 300px;
+  padding: 14px 12px;
+  margin: 6px 8px 0 0;
+  box-shadow: 0 10px 44px alpha(@base00, 0.5);
+}
+
+.bt-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid alpha(@base02, 0.7);
+}
+
+.bt-header-title {
+  font-size: 15px;
+  font-weight: bold;
+  color: @base05;
+}
+
+.bt-close-btn {
+  background: alpha(@base02, 0.6);
+  border-radius: 9px;
+  padding: 2px 9px;
+  font-size: 11px;
+  color: alpha(@base05, 0.7);
+  transition: all 150ms ease;
+}
+
+.bt-close-btn:hover {
+  background: alpha(@base05, 0.14);
+  color: @base05;
+}
+
+.bt-empty {
+  color: alpha(@base05, 0.35);
+  padding: 20px;
+}
+
+.bt-device {
+  background: transparent;
+  border-radius: 11px;
+  padding: 7px 10px;
+  transition: all 150ms ease;
+}
+
+.bt-device:hover {
+  background: alpha(@base05, 0.07);
+}
+
+.bt-device.active {
+  background: linear-gradient(135deg, alpha(@base0E, 0.16), alpha(@base0C, 0.14));
+  box-shadow: inset 0 0 0 1px alpha(@base0E, 0.32);
+}
+
+.bt-device-icon {
+  color: @base0E;
+  font-size: 15px;
+}
+
+.bt-device-name {
+  font-size: 13px;
+  color: @base05;
+}
+
+.bt-device-battery {
+  font-size: 11px;
+  color: alpha(@base0B, 0.8);
+}
+
+.bt-device-check {
+  color: @base0B;
+  font-size: 14px;
+}
+
+.bt-advanced-btn {
+  background: alpha(@base02, 0.5);
+  border-radius: 11px;
+  padding: 7px 12px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: alpha(@base05, 0.7);
+  transition: all 150ms ease;
+}
+
+.bt-advanced-btn:hover {
+  background: alpha(@base0E, 0.12);
+  color: @base0E;
+}
+
+/* ───────────── POWER MENU ───────────── */
+
+.tray-item.power label {
+  font-size: 15px;
+  color: alpha(@base05, 0.60);
+}
+
+.tray-item.power:hover label {
+  color: @base08;
+}
+
+.power-menu-window {
+  background: transparent;
+}
+
+.power-panel {
+  background: linear-gradient(160deg, alpha(@base01, 0.96), alpha(@base00, 0.98));
+  border: 1px solid alpha(@base05, 0.10);
+  border-radius: 20px;
+  padding: 14px 14px 16px 14px;
+  margin: 6px 8px 0 0;
+  box-shadow: 0 12px 48px alpha(@base00, 0.60), inset 0 0 0 1px alpha(@base05, 0.04);
+  min-width: 320px;
+}
+
+/* Header row */
+.power-panel-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid alpha(@base02, 0.7);
+  margin-bottom: 4px;
+}
+
+.power-panel-icon {
+  font-size: 15px;
+  color: alpha(@base05, 0.50);
+}
+
+.power-panel-title {
+  font-size: 13px;
+  font-weight: bold;
+  color: alpha(@base05, 0.70);
+  letter-spacing: 1px;
+}
+
+.power-close-btn {
+  background: alpha(@base02, 0.5);
+  border-radius: 8px;
+  padding: 1px 8px;
+  font-size: 11px;
+  color: alpha(@base05, 0.50);
+  transition: all 140ms ease;
+}
+
+.power-close-btn:hover {
+  background: alpha(@base05, 0.12);
+  color: @base05;
+}
+
+/* Grid of icon buttons */
+.power-grid {
+  padding: 2px 0;
+}
+
+.power-grid-btn {
+  background: alpha(@base02, 0.40);
+  border: 1px solid alpha(@base05, 0.08);
+  border-radius: 14px;
+  padding: 12px 6px 10px 6px;
+  transition: all 160ms ease;
+}
+
+.power-grid-btn:hover {
+  background: alpha(@base05, 0.10);
+  border-color: alpha(@base05, 0.16);
+}
+
+.power-grid-btn.warn {
+  background: alpha(@base09, 0.08);
+  border-color: alpha(@base09, 0.18);
+}
+
+.power-grid-btn.warn:hover {
+  background: alpha(@base09, 0.18);
+  border-color: alpha(@base09, 0.35);
+}
+
+.power-grid-btn.danger {
+  background: alpha(@base08, 0.08);
+  border-color: alpha(@base08, 0.18);
+}
+
+.power-grid-btn.danger:hover {
+  background: alpha(@base08, 0.20);
+  border-color: alpha(@base08, 0.38);
+}
+
+.power-grid-icon {
+  font-size: 22px;
+  color: alpha(@base05, 0.75);
+  transition: color 160ms ease;
+}
+
+.power-grid-btn:hover .power-grid-icon {
+  color: @base05;
+}
+
+.power-grid-btn.warn .power-grid-icon { color: alpha(@base09, 0.80); }
+.power-grid-btn.warn:hover .power-grid-icon { color: @base09; }
+.power-grid-btn.danger .power-grid-icon { color: alpha(@base08, 0.80); }
+.power-grid-btn.danger:hover .power-grid-icon { color: @base08; }
+
+.power-grid-label {
+  font-size: 10px;
+  color: alpha(@base05, 0.55);
+  letter-spacing: 0.2px;
+  transition: color 160ms ease;
+}
+
+.power-grid-btn:hover .power-grid-label { color: alpha(@base05, 0.85); }
+.power-grid-btn.warn .power-grid-label { color: alpha(@base09, 0.65); }
+.power-grid-btn.warn:hover .power-grid-label { color: @base09; }
+.power-grid-btn.danger .power-grid-label { color: alpha(@base08, 0.65); }
+.power-grid-btn.danger:hover .power-grid-label { color: @base08; }
+
+/* ───────────── CALENDAR POPUP ───────────── */
+
+.calendar-popup-window {
+  background: transparent;
+}
+
+.cal-panel {
+  background: linear-gradient(160deg, alpha(@base01, 0.95), alpha(@base00, 0.97));
+  border: 1px solid alpha(@base0C, 0.18);
+  border-top: none;
+  border-radius: 0 0 18px 18px;
+  padding: 10px 12px 14px 12px;
+  min-width: 260px;
+  box-shadow:
+    0 12px 40px alpha(@base00, 0.55),
+    inset 0 0 0 1px alpha(@base05, 0.04),
+    inset 0 0 20px alpha(@base0C, 0.04);
+}
+
+/* Month nav header */
+.cal-header {
+  padding-bottom: 8px;
+  border-bottom: 1px solid alpha(@base02, 0.6);
+  margin-bottom: 2px;
+}
+
+.cal-nav-btn {
+  background: transparent;
+  border-radius: 8px;
+  padding: 1px 9px;
+  font-size: 16px;
+  color: alpha(@base05, 0.50);
+  transition: all 140ms ease;
+}
+
+.cal-nav-btn:hover {
+  background: alpha(@base05, 0.10);
+  color: @base0C;
+}
+
+.cal-month-label {
+  font-size: 13px;
+  font-weight: bold;
+  color: @base05;
+  letter-spacing: 0.5px;
+}
+
+/* Day-of-week header row */
+.cal-weekdays {
+  margin-bottom: 2px;
+}
+
+.cal-weekday {
+  font-size: 10px;
+  font-weight: bold;
+  color: alpha(@base05, 0.38);
+  padding: 4px 0 2px 0;
+  min-width: 32px;
+}
+
+.cal-weekday.weekend {
+  color: alpha(@base0E, 0.50);
+}
+
+/* Day cells */
+.cal-row {
+  /* row container, cells share space evenly via hexpand */
+}
+
+.cal-day {
+  font-size: 12px;
+  color: alpha(@base05, 0.70);
+  padding: 4px 0;
+  min-width: 32px;
+  border-radius: 8px;
+  transition: all 120ms ease;
+}
+
+.cal-day.empty {
+  color: transparent;
+}
+
+.cal-day.weekend {
+  color: alpha(@base0E, 0.65);
+}
+
+.cal-day.today {
+  color: @base00;
+  background: linear-gradient(135deg, @base0C, @base0E);
+  font-weight: bold;
+  border-radius: 999px;
+  min-width: 28px;
+  box-shadow: 0 2px 8px alpha(@base0C, 0.40);
+}
+
+/* ───────────── APP LAUNCHER ───────────── */
+
+.launcher-window {
+  background: transparent;
+}
+
+/* Floating glass panel — same translucent fill + hairline border + soft depth
+   shadow as the bar pills, scaled up. Hyprland blurs the `launcher` namespace
+   (layerrule) so the fill reads as frosted glass. Drops down from the top with
+   a gentle fade. */
+.launcher-panel {
+  background: linear-gradient(180deg, alpha(@base01, 0.82), alpha(@base00, 0.88));
+  border: 1px solid alpha(@base0C, 0.16);
+  border-radius: 20px;
+  min-width: 600px;
+  /* Small gap below the bar. The window now uses NORMAL exclusivity, so the
+     compositor already offsets it past the bar — no big manual margin needed. */
+  margin-top: 8px;
+  padding: 12px;
+  box-shadow:
+    0 18px 60px alpha(@base00, 0.60),
+    inset 0 0 0 1px alpha(@base05, 0.04),
+    inset 0 0 36px alpha(@base0C, 0.04);
+  animation: launcher-in 200ms ease;
+}
+
+/* Search row */
+.launcher-search {
+  background: alpha(@base00, 0.55);
+  border: 1px solid alpha(@base05, 0.07);
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+}
+
+.launcher-search-icon {
+  font-size: 18px;
+  color: @base0C;
+  transition: color 160ms ease;
+}
+
+/* Per-mode accent: the search glyph + caret recolour so the active mode is
+   obvious at a glance (teal = apps/calc, purple = shell, green = web). */
+.launcher-search.mode-shell .launcher-search-icon { color: @base0E; }
+.launcher-search.mode-web   .launcher-search-icon { color: @base0B; }
+.launcher-search.mode-shell { border-color: alpha(@base0E, 0.22); }
+.launcher-search.mode-web   { border-color: alpha(@base0B, 0.22); }
+.launcher-search.mode-calc  { border-color: alpha(@base0C, 0.26); }
+
+.launcher-entry {
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  color: @base05;
+  font-size: 15px;
+  caret-color: @base0C;
+}
+
+.launcher-entry placeholder {
+  color: alpha(@base05, 0.38);
+}
+
+/* Glyph icon used by non-app results (calc/shell/web) in place of the app
+   image — sized to roughly match the 32px app icons. */
+.launcher-item-glyph {
+  font-size: 24px;
+  min-width: 32px;
+  color: alpha(@base05, 0.85);
+}
+
+.launcher-item-glyph.accent  { color: @base0C; }
+.launcher-item-glyph.urgent  { color: @base0F; }
+
+/* Inert rows are hints, not actions — dimmed and never highlighted. */
+.launcher-item.inert .launcher-item-name { color: alpha(@base05, 0.55); }
+.launcher-item.inert.selected {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* Results list */
+.launcher-scroll {
+  /* scrolledwindow viewport */
+}
+
+.launcher-scroll scrollbar {
+  background: transparent;
+}
+
+.launcher-scroll scrollbar slider {
+  background: alpha(@base05, 0.16);
+  border-radius: 6px;
+  min-width: 5px;
+}
+
+.launcher-scroll scrollbar slider:hover {
+  background: alpha(@base05, 0.30);
+}
+
+.launcher-empty {
+  padding: 40px 20px;
+  font-size: 13px;
+  color: alpha(@base05, 0.42);
+  letter-spacing: 2px;
+}
+
+/* Result row — transparent by default, teal→purple gradient highlight when
+   selected (keyboard or hover), echoing the active workspace pill. */
+.launcher-item {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  padding: 8px 12px;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+
+.launcher-item:hover {
+  background: alpha(@base05, 0.06);
+}
+
+.launcher-item.selected {
+  background: linear-gradient(135deg, alpha(@base0C, 0.22), alpha(@base0E, 0.20));
+  border-color: alpha(@base0C, 0.32);
+  box-shadow: inset 0 0 0 1px alpha(@base0C, 0.18);
+}
+
+.launcher-item-icon {
+  -gtk-icon-size: 32px;
+  opacity: 0.95;
+}
+
+.launcher-item-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: @base05;
+}
+
+.launcher-item.selected .launcher-item-name {
+  color: @base07;
+}
+
+.launcher-item-desc {
+  font-size: 11px;
+  color: alpha(@base05, 0.50);
+  margin-top: 1px;
+}
+
+.launcher-item.selected .launcher-item-desc {
+  color: alpha(@base05, 0.70);
+}
+
+/* Footer — keyboard + mode legend */
+.launcher-footer {
+  padding: 8px 8px 2px 8px;
+  margin-top: 8px;
+  border-top: 1px solid alpha(@base05, 0.06);
+}
+
+.launcher-hint {
+  font-size: 10px;
+  color: alpha(@base05, 0.45);
+  letter-spacing: 0.3px;
+}
+
+.launcher-hint.dim {
+  color: alpha(@base05, 0.30);
+}
+
+/* ───────────── OSD ───────────── */
+
+.osd-window {
+  background: transparent;
+}
+
+.osd {
+  background: alpha(@base00, 0.94);
+  border: 1px solid alpha(@base05, 0.09);
+  border-radius: 20px;
+  padding: 14px 28px;
+  margin-bottom: 24px;
+  min-width: 280px;
+  animation: osd-in 220ms ease;
+  box-shadow: 0 10px 36px alpha(@base00, 0.6);
+}
+
+.osd-icon {
+  font-size: 22px;
+  color: @base0C;
+  margin-right: 12px;
+}
+
+levelbar {
+  min-height: 6px;
+}
+
+levelbar trough {
+  background: alpha(@base02, 0.8);
+  border-radius: 4px;
+  min-height: 6px;
+}
+
+levelbar block.filled {
+  background: linear-gradient(90deg, @base0C, @base0E);
+  border-radius: 4px;
+}
+
+levelbar block.empty {
+  background: transparent;
+}

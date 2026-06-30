@@ -9,5 +9,6 @@
     (import ./web-search.nix {inherit pkgs;})
     (import ./rofi-launcher.nix {inherit pkgs;})
     (import ./screenshootin.nix {inherit pkgs;})
+    (import ./toggle-bluelight.nix {inherit pkgs;})
   ];
 }

@@ -9,10 +9,10 @@ in {
     bind = [
       "$modifier,Return,exec,${terminal}"
       "$modifier,K,exec,list-keybinds"
-      "$modifier SHIFT,Return,exec,rofi-launcher"
+      "$modifier SHIFT,Return,exec,ags toggle launcher -i shell"
       "$modifier SHIFT,W,exec,web-search"
-      "$modifier ALT,W,exec,wallsetter"
-      "$modifier SHIFT,N,exec,swaync-client -rs"
+      "$modifier ALT,W,exec,wp-rotation"
+      "$modifier SHIFT,N,exec,ags toggle notification-center -i shell"
       "$modifier,W,exec,${browser}"
       "$modifier,Y,exec,kitty -e yazi"
       "$modifier,N,exec,nemo"
@@ -27,7 +27,7 @@ in {
       "$modifier,Q,killactive,"
       "$modifier,P,pseudo,"
       "$modifier,V,exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy"
-      "$modifier SHIFT,I,togglesplit,"
+      "$modifier SHIFT,I,layoutmsg,togglesplit"
       "$modifier,F,fullscreen, 1"
       "$modifier SHIFT,F,togglefloating,"
       "$modifier ALT,F,workspaceopt, allfloat"
@@ -79,6 +79,9 @@ in {
       ",XF86AudioPrev, exec, playerctl previous"
       ",XF86MonBrightnessDown,exec,brightnessctl set 5%-"
       ",XF86MonBrightnessUp,exec,brightnessctl set +5%"
+      ",Print,exec,grim - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png | wl-copy"
+      "SHIFT,Print,exec,screenshootin"
+      "$modifier,Print,exec,grim -g \"$(hyprctl activewindow -j | jq -r '\"\\(.at[0]),\\(.at[1]) \\(.size[0])x\\(.size[1])\"')\" - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png | wl-copy"
     ];
 
     bindm = [
