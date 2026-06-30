@@ -1,7 +1,7 @@
 {
   # Git Configuration
   gitUsername = "Martin Bothe";
-  gitEmail = "martin.bothe@quasiris.de";
+  gitEmail = "bothe.martin@gmx.de";
 
   # Hyprland Settings
   extraMonitorSettings = "";
